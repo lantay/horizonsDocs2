@@ -1,4 +1,5 @@
 var React = require('react');
+import { render } from 'react-dom';
 var ReactDOM = require('react-dom');
 import { HashRouter } from 'react-router-dom';
 import Container from './components/Container';
@@ -8,7 +9,6 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
-
 
 import Draft from '../node_modules/draft-js/dist/Draft.css';
 
@@ -27,6 +27,3 @@ ReactDOM.render(
   </MuiThemeProvider>,
    document.getElementById('root')
 );
-
-this.refs.editor.focus(); 
-
