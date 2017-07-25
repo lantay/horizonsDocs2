@@ -1,5 +1,10 @@
 var React = require('react');
+import { render } from 'react-dom';
 var ReactDOM = require('react-dom');
+// import App from './components/App';
+import Document from './containers/docContainer';
+import DocsPortal from './containers/docsPortalContainer'
+
 
 /* This can check if your electron app can communicate with your backend */
 // fetch('http://localhost:3000')
@@ -7,5 +12,7 @@ var ReactDOM = require('react-dom');
 // .then(text => console.log(text))
 // .catch(err => {throw err})
 
-ReactDOM.render(<p>React lives!</p>,
+
+ReactDOM.render(
+  <DocsPortal />,
    document.getElementById('root'));
