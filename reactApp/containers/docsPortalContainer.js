@@ -9,7 +9,8 @@ class DocsPortal extends React.Component {
       <div>
           <h1>MOQ Portal </h1>
           <form>
-                <input type="text" name="creatDocumentText"> </input>
+                 <input type="text" name="createDocumentText"/>
+                 <input type="submit" name="submitDocumentText"/>
           </form>
           {/* <Route exact={true} path="/" component={GameContainer}/> */}
       </div>

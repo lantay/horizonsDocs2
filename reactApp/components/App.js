@@ -1,7 +1,7 @@
 // should only take the static title and the {routes}
 import React from 'react';
-import {Link, Route} from 'react-router-dom';
-import docsPortalContainer from '../containers/docsPortalContainer';
+// import {Link, Route} from 'react-router-dom';
+import DocsPortal from '../containers/docsPortalContainer';
 
 // const App = () =>
 //     <div>
