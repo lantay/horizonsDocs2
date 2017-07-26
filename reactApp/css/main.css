@@ -1,0 +1,9 @@
+.toolbar {
+  border-bottom: 2px solid palegreen; 
+  padding: 1%; 
+  margin-bottom: 4%
+}
+
+.toolbar > * {
+  margin-right: 1%; 
+}
