@@ -1,7 +1,5 @@
 var React = require('react');
-import { render } from 'react-dom';
 var ReactDOM = require('react-dom');
-import { HashRouter } from 'react-router-dom';
 import Container from './components/Container';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -11,6 +9,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 injectTapEventPlugin();
 
 import Draft from '../node_modules/draft-js/dist/Draft.css';
+require ('./css/main.css');
 
 // import Welcome from './components/Welcome';
 /* This can check if your electron app can communicate with your backend */
@@ -21,9 +20,7 @@ import Draft from '../node_modules/draft-js/dist/Draft.css';
 
 ReactDOM.render(
   <MuiThemeProvider>
-    <HashRouter>
       <Container />
-    </HashRouter>
   </MuiThemeProvider>,
    document.getElementById('root')
 );

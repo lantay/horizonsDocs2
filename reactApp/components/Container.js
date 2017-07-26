@@ -1,11 +1,13 @@
 import React from 'react';
 import Links from './Links';
-import Main from './Main';
+import Home from './Home';
+import { HashRouter } from 'react-router-dom';
 
 const Container = () => (
   <div>
-    <Links />
-    <Main />
+    <HashRouter>
+      <Home />
+    </HashRouter>
   </div>
 ); 
 
