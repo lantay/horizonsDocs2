@@ -1,18 +1,18 @@
 import React from 'react';
 import {
   DefaultDraftBlockRenderMap,
-  Editor, 
-  EditorState, 
-  RichUtils 
+  Editor,
+  EditorState,
+  RichUtils
 } from 'draft-js';
 import { Link } from 'react-router-dom';
-// Material-UI stuff 
+// Material-UI stuff
 import RaisedButton from 'material-ui/RaisedButton';
 import Popover, {PopoverAnimationVertical} from 'material-ui/Popover';
 import FontIcon from 'material-ui/FontIcon';
 import * as colors from 'material-ui/styles/colors';
 
-// Colorpicker 
+// Colorpicker
 import { SwatchesPicker } from 'react-color';
 
 // Stuff for left, right, and center text alignments
@@ -27,7 +27,7 @@ class Document extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      editorState: EditorState.createEmpty(), 
+      editorState: EditorState.createEmpty(),
       inlineStyles: {}
     };
   }
@@ -47,11 +47,11 @@ class Document extends React.Component {
     } else {
       this.setState({editorState: RichUtils.toggleInlineStyle(this.state.editorState, style)});
     }
-    
+
   }
 
   // -------------------------------------------------------------------------------------
-  // Function that makes the buttons 
+  // Function that makes the buttons
   // -------------------------------------------------------------------------------------
 
   formatButton({icon, style, block}) {
@@ -61,19 +61,19 @@ class Document extends React.Component {
           colors.teal700 : colors.teal200
         }
         icon={<FontIcon className="material-icons">{icon}</FontIcon>}
-        // Why can't I have in the argument for the func? 
+        // Why can't I have in the argument for the func?
         onMouseDown={(e) => this.toggleFormat(e, style, block)}
-      />  
+      />
     );
   }
 
   // -------------------------------------------------------------------------------------
-  // Colorpicker 
+  // Colorpicker
   // -------------------------------------------------------------------------------------
 
   openColorPicker(e) {
     this.setState({
-      colorPickerOpen: true, 
+      colorPickerOpen: true,
       colorPickerButton: e.target
     });
   }
@@ -87,8 +87,8 @@ class Document extends React.Component {
   formatColor(color) {
     console.log('color = ', color);
     var newInlineStyles = Object.assign(
-      {}, 
-      this.state.inlineStyles, 
+      {},
+      this.state.inlineStyles,
       {
         [color.hex] : {
           color: color.hex
@@ -96,7 +96,7 @@ class Document extends React.Component {
       }
     );
     this.setState({
-      inlineStyles: newInlineStyles, 
+      inlineStyles: newInlineStyles,
       editorState: RichUtils.toggleInlineStyle(this.state.editorState, color.hex)
     });
     console.log(this.state);
@@ -111,7 +111,7 @@ class Document extends React.Component {
           label="Select a color"
           onClick={this.openColorPicker.bind(this)}
         />
-        <Popover 
+        <Popover
           open={this.state.colorPickerOpen}
           anchorEl={this.state.colorPickerButton}
           anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
@@ -121,7 +121,7 @@ class Document extends React.Component {
         >
         <SwatchesPicker onChangeComplete={this.formatColor.bind(this)}/>
         </Popover>
-      </div> 
+      </div>
     );
   }
 
@@ -139,11 +139,11 @@ class Document extends React.Component {
           {this.formatButton({icon: 'format_align_left', style: 'ordered-list-item', block: true})}
           {this.formatButton({icon: 'format_align_center', style: 'center', block: true})}
           {this.formatButton({icon: 'format_align_right', style: 'ordered-list-item', block: true})}
-        </div>    
-        <Editor 
+        </div>
+        <Editor
           ref="editor"
           blockRenderMap={myBlockTypes}
-          editorState={this.state.editorState} onChange={this.onChange.bind(this)} 
+          editorState={this.state.editorState} onChange={this.onChange.bind(this)}
           customStyleMap={this.state.inlineStyles}
         />
       </div>
