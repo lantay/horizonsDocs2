@@ -15,7 +15,6 @@ const userSchema = mongoose.Schema({
 
 const documentSchema = mongoose.Schema({
   title: String ,
-
   collabs:[
     {
   //array of users that have access to the doc
