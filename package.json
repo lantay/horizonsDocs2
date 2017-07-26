@@ -34,6 +34,7 @@
     "webpack-dev-server": "^2.6.0"
   },
   "dependencies": {
+    "axios": "^0.16.2",
     "babel-polyfill": "^6.23.0",
     "draft-js": "^0.10.1",
     "express": "^4.15.3",
