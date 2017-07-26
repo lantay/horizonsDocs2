@@ -12,6 +12,19 @@ app.get('/', function(req, res) {
   res.send('Hello World!');
 });
 
+app.get('/docslist', function (req, res) {
+  var docsArray = [];
+  Document.find({collaborators:req.params.userId})
+    .exec()
+    .then((documents) => {
+      documents.forEach((document) => {
+        docsArray.push(document);
+      });
+    });
+  res.send(docsArray);
+
+});
+
 // Handling a registration request
 app.post('/register', function(req, res) {
   console.log('req type', typeof req); 
