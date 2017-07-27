@@ -1,19 +1,16 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+
+// import io from 'socket.io-client';
+
+// DraftJS stuff 
 import {
   DefaultDraftBlockRenderMap,
   Editor,
   EditorState,
   RichUtils
 } from 'draft-js';
-import { Link } from 'react-router-dom';
-// Material-UI stuff
-import RaisedButton from 'material-ui/RaisedButton';
-import Popover, {PopoverAnimationVertical} from 'material-ui/Popover';
-import FontIcon from 'material-ui/FontIcon';
-import * as colors from 'material-ui/styles/colors';
-
-// Colorpicker
-import { SwatchesPicker } from 'react-color';
 
 // Stuff for left, right, and center text alignments
 import { Map } from 'immutable';
@@ -23,6 +20,17 @@ const myBlockTypes = DefaultDraftBlockRenderMap.merge(new Map({
   }
 }));
 
+// Material-UI stuff
+import RaisedButton from 'material-ui/RaisedButton';
+import Popover, {PopoverAnimationVertical} from 'material-ui/Popover';
+import FontIcon from 'material-ui/FontIcon';
+import * as colors from 'material-ui/styles/colors';
+
+// Colorpicker
+import { SwatchesPicker } from 'react-color';
+
+
+
 class Document extends React.Component {
   constructor(props) {
     super(props);
@@ -30,9 +38,22 @@ class Document extends React.Component {
       editorState: EditorState.createEmpty(),
       inlineStyles: {}
     };
+
+
+  //   this.socket = io('http://localhost:3000');
+  //   this.socket.emit('hello', {name: 'Otto'});
+  //   this.socket.on('helloBack', () => console.log('hello back'));
+    
+  //   // Put the doc idea after the doc key below 
+  //   this.socket.emit('join', {doc: });
   }
 
+  // componentWillUnmount() {
+  //   // this.socket.disonnect();
+  // };
+
   onChange(editorState) {
+    // const contentState = editorState.getCurrentContent(); 
     this.setState({
       editorState: editorState
     });
@@ -47,7 +68,6 @@ class Document extends React.Component {
     } else {
       this.setState({editorState: RichUtils.toggleInlineStyle(this.state.editorState, style)});
     }
-
   }
 
   // -------------------------------------------------------------------------------------
@@ -125,10 +145,47 @@ class Document extends React.Component {
     );
   }
 
+  // -------------------------------------------------------------------------------------
+  // Handling document saves
+  // -------------------------------------------------------------------------------------
+  saveHandler() {
+    // const contentState = this.state.editorState.getCurrentContent(); 
+    // const stringifiedContent = JSON.stringify(convertToRaw(contentState));
+   
+    // What about inlineStyles??? 
+    // Or whatever we are using for docId
+    const docId = this.props.docId;
+
+      // const new EditorState = EditorState.createWithContent(contentState);
+      // then use this to update this.state.editorState
+    axios.post('/saveDoc', {
+      docId: docId,
+      editorState: this.state.editorState, 
+      inlineStyles: this.state.inlineStyles
+    })
+
+    // JSON.stringify != JSON.parse 
+    // convertToRaw != convertFromRaw 
+
+    .then((res) => {
+      res.json();
+    })
+    .then((res)=> {
+      console.log('Updates saved to the server!');
+    })
+    .catch((err)=> {
+      console.log("Error! : ", err);
+    });
+  }
+
   render() {
     return (
       <div>
         <Link to='/'>Home</Link>
+        {/* <RaisedButton 
+          backgroundColor={colors.blue100}
+          onClick={()=>this.saveHandler()}
+        /> */}
         <div className='toolbar'>
           {this.formatButton({icon: 'format_bold', style: 'BOLD'})}
           {this.formatButton({icon: 'format_italics', style: 'ITALIC'})}
@@ -141,9 +198,9 @@ class Document extends React.Component {
           {this.formatButton({icon: 'format_align_right', style: 'ordered-list-item', block: true})}
         </div>
         <Editor
-          ref="editor"
           blockRenderMap={myBlockTypes}
-          editorState={this.state.editorState} onChange={this.onChange.bind(this)}
+          editorState={this.state.editorState} 
+          onChange={this.onChange.bind(this)}
           customStyleMap={this.state.inlineStyles}
         />
       </div>

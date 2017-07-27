@@ -1,62 +1,71 @@
 import React from 'react';
-import { Switch, Route, Link } from 'react-router-dom';
-import { Document } from './models';
-import mongoose from 'mongoose';
-import axios from 'axios';import axios from 'axios';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
 
 class Links extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      newDocName: '',
       documents: [],
-      userId: 'string',
+      userId: ''
     };
   }
 
   componentDidMount() {
-    axios.get('/docslist'), {
-      params: {
-        userId: this.state.userId
-      }
-    }
-      .then(function (response) {
-        this.setState({
-          documents: response
-        });
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    // axios.get('/docslist'), {
+    //   params: {
+    //     userId: this.state.userId
+    //   }
+    // }
+    // .then(function(response) {
+    //   this.setState({
+    //     documents: response
+    //   });
+    // })
+    // .catch(function(error) {
+    //   console.log(error);
+    // });
   }
-  
-  createDoc(){
-    axios.post('/createDoc'), {
-      params: {
-        userId: this.state.userId
-      }
-    }
-    .then(function (response) {
-      axios.get('/edit/:docId'), {
-        params: {
-          userId: this.state.userId
-        }
-      }  
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+  // -------------------------------------------------------------------------------------
+  // Creating a new doc 
+  // -------------------------------------------------------------------------------------
 
+  handleNewDocName(event) {
+    this.setState({newDocName: event.target.value});
+  }
+
+  createDoc() {
+    axios.post('http://localhost:3000/createDoc', {
+      userId: this.state.userId, 
+      docName: this.state.newDocName
+    })
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }
   
   loadDoc(){
 
   }
+
   render() {
     return (
-
       <div>
-        <input type="text" placeholder="Document Name" />
-        <input type="submit" value="Create New Document" onSubmit={createDoc()}/>
+        <TextField 
+          onChange={(event) => this.handleNewDocName(event)} 
+          hintText="Document name" 
+        />
+        <RaisedButton 
+          label = "Create a new document"
+          primary= {true}
+          onClick = {() => this.createDoc()}
+        />
         <nav>
           <ul>
             <li><Link to='/Document1'>Document 1</Link></li>
@@ -64,9 +73,9 @@ class Links extends React.Component {
           </ul>
         </nav>
         <input type="text" placeholder="Paste Document ID" />
-        <input type="submit" value="Load Shared Document" onSubmit={loadDoc()} />
+        <input type="submit" value="Load Shared Document" onSubmit={()=>this.loadDoc()} />
       </div>
     );
-
   }
-  export default Links;
+}
+export default Links;

@@ -1,10 +1,9 @@
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
 mongoose.connect(process.env.MONGODB_URI);
 
 const userSchema = mongoose.Schema({
   username: {
-    type: mongoose.schema.ObjectId,
+    type: String,
     required: true
   },
   password: {
@@ -14,9 +13,9 @@ const userSchema = mongoose.Schema({
 });
 
 const documentSchema = mongoose.Schema({
-  title: String ,
-
-  collabs:[
+  title: String,
+  editorState: Object,
+  collabs: [
     {
   //array of users that have access to the doc
       type: mongoose.Schema.ObjectId,
@@ -27,16 +26,13 @@ const documentSchema = mongoose.Schema({
   owner: {
     type:mongoose.Schema.ObjectId,
     ref: 'User'
-  },
-  password: String
+  }
 });
 
-
 const User = mongoose.model('User', userSchema);
-const Document = mongoose.model('Document', documentSchema);
+const Doc = mongoose.model('Doc', documentSchema);
 
-
-module.export= {
+module.exports = {
   User: User,
-  Document: Document
+  Doc: Doc
 };
