@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, hashHistory  } from 'react-router';
+import { Link, hashHistory, Redirect  } from 'react-router';
 // Axios 
 import axios from 'axios';
 
@@ -17,15 +17,14 @@ class Register extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      greeting: '', 
       username: '', 
-      password: ''
+      password: '', 
+      loggedIn: false
     };
   }
 
   componentDidMount() {
-    console.log(this.props.router);
-    console.log(this.context.router);
+    console.log(this.props);
     axios.get('http://localhost:3000/')
     .then((res) => {
       this.setState({greeting: res.data});
@@ -51,7 +50,8 @@ class Register extends React.Component {
     })
     .then((res) => {
       console.log(res.data);
-      // this.props.history.push('/Home');
+      this.setState({loggedIn: true});
+      // And I want to pass along the userid that would be contained in res!
     })  
     .catch((err) => {
       console.log(err);
@@ -72,6 +72,7 @@ class Register extends React.Component {
           hintText="Enter a password" 
         />
         <RaisedButton label="Register" primary={true} onClick={() => this.registerUser()}/>
+        {this.state.loggedIn ? <Redirect to="/Home" /> : <div></div> }
       </div>
     );
   }  

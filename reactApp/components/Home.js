@@ -9,14 +9,26 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      userId: ''
     };
+  }
+
+  setUser(userId) {
+    this.setState({userId: userId});
   }
 
   render() {
     return (
       <div>
         <Switch>
-          <Route exact path='/' component={Register} /> 
+          {/* <Route exact path='/Login' component={Login} /> */}
+          <Route exact path='/' 
+            render={() => 
+              <Register 
+                setUser={(userId) => this.setUser(userId)} 
+              />
+            } 
+          /> 
           <Route exact path='/Home' render={(userid) => <Links id={userid} />} />
           <Route exact path='/Document1' component={Document} />
         </Switch>
