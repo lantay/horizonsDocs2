@@ -60,7 +60,6 @@ app.post('/register', function(req, res) {
       res.status(500).redirect('/');
     } else {
       res.send('Successfully registered');
-      res.redirect('/');
     }
   });
 });
