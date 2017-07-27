@@ -30,7 +30,7 @@ class Links extends React.Component {
     // });
   }
   // -------------------------------------------------------------------------------------
-  // Creating a new doc 
+  // Creating a new doc
   // -------------------------------------------------------------------------------------
 
   handleNewDocName(event) {
@@ -39,17 +39,31 @@ class Links extends React.Component {
 
   createDoc() {
     axios.post('http://localhost:3000/createDoc', {
-      userId: this.state.userId, 
+      userId: this.state.userId,
       docName: this.state.newDocName
     })
     .then((res) => {
       console.log(res);
+
+
+  createDoc(){
+    axios.post('/createDoc'), {
+      params: {
+        userId: this.state.userId
+      }
+    }
+    .then(function (response) {
+      axios.get('/edit/:docId'), {
+        params: {
+          userId: this.state.userId
+        }
+      }
     })
     .catch((err) => {
       console.log(err);
     });
   }
-  
+
   loadDoc(){
 
   }
@@ -57,11 +71,11 @@ class Links extends React.Component {
   render() {
     return (
       <div>
-        <TextField 
-          onChange={(event) => this.handleNewDocName(event)} 
-          hintText="Document name" 
+        <TextField
+          onChange={(event) => this.handleNewDocName(event)}
+          hintText="Document name"
         />
-        <RaisedButton 
+        <RaisedButton
           label = "Create a new document"
           primary= {true}
           onClick = {() => this.createDoc()}
@@ -77,5 +91,4 @@ class Links extends React.Component {
       </div>
     );
   }
-}
-export default Links;
+  export default Links;
