@@ -2,6 +2,11 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 
+// Importing our models
+const models = require('../models');
+const Docs = models.Docs;
+const User = models.User;
+
 // Body Parser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -12,9 +17,28 @@ app.get('/', function(req, res) {
   res.send('Hello World!');
 });
 
-app.get('/docslist', function (req, res) {
+// Handling a registration request
+app.post('/register', function(req, res) { 
+  console.log('req.body = ', req.body);
+  
+  var newUser = new User({
+    username: req.body.username,
+    password: req.body.password, 
+  });	
+  newUser.save(function(err, user) {
+    if (err) {
+      console.log("error", err);
+      res.status(500).redirect('/');
+    } else {
+      res.send('Successfully registered!');
+    }
+  });
+});
+
+// Retrieving the list of document upon logging in
+app.get('/docslist', function(req, res) {
   var docsArray = [];
-  Document.find({collaborators:req.params.userId})
+  Docs.find({collaborators:req.params.userId})
     .exec()
     .then((documents) => {
       documents.forEach((document) => {
@@ -22,13 +46,10 @@ app.get('/docslist', function (req, res) {
       });
     });
   res.send(docsArray);
-
 });
 
-// Handling a registration request
-app.post('/register', function(req, res) {
-  console.log('req type', typeof req); 
-  res.send('Successfully sent the registration info to the server!');
+// Saving changes to a document 
+app.get('/saveDoc', function(req, res) {	
 });
 
 app.listen(3000, function () {

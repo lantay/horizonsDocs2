@@ -10,8 +10,8 @@ import axios from 'axios';
 // Material UI stuff 
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import FontIcon from 'material-ui/FontIcon';
-import * as colors from 'material-ui/styles/colors';
+// import FontIcon from 'material-ui/FontIcon';
+// import * as colors from 'material-ui/styles/colors';
 
 class Register extends React.Component {
   constructor(props) {
@@ -24,6 +24,8 @@ class Register extends React.Component {
   }
 
   componentDidMount() {
+    console.log(this.props.router);
+    console.log(this.context.router);
     axios.get('http://localhost:3000/')
     .then((res) => {
       this.setState({greeting: res.data});
@@ -35,6 +37,7 @@ class Register extends React.Component {
 
   handleUsernameChange (event) {
     this.setState({username: event.target.value});
+    console.log('username = ', this.state.username);
   }
 
   handlePasswordChange (event) {
@@ -47,10 +50,8 @@ class Register extends React.Component {
       password: this.state.password
     })
     .then((res) => {
-      res.json();
-    })
-    .then((res) => {
-    })
+      console.log(res.data);
+    })  
     .catch((err) => {
       console.log(err);
     });
@@ -61,8 +62,14 @@ class Register extends React.Component {
       <div>
         <h3>Create an account </h3>
         <h3>{this.state.greeting}</h3>
-        <TextField onChange={(event) => this.handleUsernameChange} hintText="Enter a username" />
-        <TextField onChange={(event) => this.handlePasswordChange} hintText="Enter a password" />
+        <TextField 
+          onChange={(event) => this.handleUsernameChange(event)} 
+          hintText="Enter a username" 
+        />
+        <TextField 
+          onChange={(event) => this.handlePasswordChange(event)} 
+          hintText="Enter a password" 
+        />
         <RaisedButton label="Register" primary={true} onClick={() => this.registerUser()}/>
       </div>
     );

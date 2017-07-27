@@ -1,11 +1,23 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+
+// DraftJS stuff 
 import {
   DefaultDraftBlockRenderMap,
   Editor,
   EditorState,
   RichUtils
 } from 'draft-js';
-import { Link } from 'react-router-dom';
+
+// Stuff for left, right, and center text alignments
+import { Map } from 'immutable';
+const myBlockTypes = DefaultDraftBlockRenderMap.merge(new Map({
+  'center': {
+    element: 'center'
+  }
+}));
+
 // Material-UI stuff
 import RaisedButton from 'material-ui/RaisedButton';
 import Popover, {PopoverAnimationVertical} from 'material-ui/Popover';
@@ -15,13 +27,7 @@ import * as colors from 'material-ui/styles/colors';
 // Colorpicker
 import { SwatchesPicker } from 'react-color';
 
-// Stuff for left, right, and center text alignments
-import { Map } from 'immutable';
-const myBlockTypes = DefaultDraftBlockRenderMap.merge(new Map({
-  'center': {
-    element: 'center'
-  }
-}));
+
 
 class Document extends React.Component {
   constructor(props) {
@@ -125,10 +131,33 @@ class Document extends React.Component {
     );
   }
 
+  // -------------------------------------------------------------------------------------
+  // Handling document saves
+  // -------------------------------------------------------------------------------------
+  saveHandler() {
+    axios.post('/saveDoc', {
+      editorState: this.state.editorState, 
+      inlineStyles: this.state.inlineStyles
+    })
+    .then((res) => {
+      res.json();
+    })
+    .then((res)=> {
+      console.log('Updates saved to the server!');
+    })
+    .catch((err)=> {
+      console.log("Error! : ", err);
+    });
+  }
+
   render() {
     return (
       <div>
         <Link to='/'>Home</Link>
+        <RaisedButton 
+          backgroundColor={colors.blue100}
+          onClick={()=>this.saveHandler()}
+        />
         <div className='toolbar'>
           {this.formatButton({icon: 'format_bold', style: 'BOLD'})}
           {this.formatButton({icon: 'format_italics', style: 'ITALIC'})}
@@ -141,9 +170,9 @@ class Document extends React.Component {
           {this.formatButton({icon: 'format_align_right', style: 'ordered-list-item', block: true})}
         </div>
         <Editor
-          ref="editor"
           blockRenderMap={myBlockTypes}
-          editorState={this.state.editorState} onChange={this.onChange.bind(this)}
+          editorState={this.state.editorState} 
+          onChange={this.onChange.bind(this)}
           customStyleMap={this.state.inlineStyles}
         />
       </div>

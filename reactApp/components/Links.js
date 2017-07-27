@@ -1,15 +1,13 @@
 import React from 'react';
-import { Switch, Route, Link } from 'react-router-dom';
-import { Document } from './models';
-import mongoose from 'mongoose';
-import axios from 'axios';import axios from 'axios';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 class Links extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       documents: [],
-      userId: 'string',
+      userId: 'string'
     };
   }
 
@@ -40,7 +38,7 @@ class Links extends React.Component {
         params: {
           userId: this.state.userId
         }
-      }  
+      };  
     })
     .catch(function (error) {
       console.log(error);
@@ -51,12 +49,12 @@ class Links extends React.Component {
   loadDoc(){
 
   }
+
   render() {
     return (
-
       <div>
         <input type="text" placeholder="Document Name" />
-        <input type="submit" value="Create New Document" onSubmit={createDoc()}/>
+        <input type="submit" value="Create New Document" onSubmit={()=>this.createDoc()}/>
         <nav>
           <ul>
             <li><Link to='/Document1'>Document 1</Link></li>
@@ -64,9 +62,9 @@ class Links extends React.Component {
           </ul>
         </nav>
         <input type="text" placeholder="Paste Document ID" />
-        <input type="submit" value="Load Shared Document" onSubmit={loadDoc()} />
+        <input type="submit" value="Load Shared Document" onSubmit={()=>this.loadDoc()} />
       </div>
     );
-
   }
-  export default Links;
+}
+export default Links;
