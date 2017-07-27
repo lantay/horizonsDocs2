@@ -15,7 +15,7 @@ const userSchema = mongoose.Schema({
 const documentSchema = mongoose.Schema({
   title: String,
   editorState: Object,
-  collabs:[
+  collabs: [
     {
   //array of users that have access to the doc
       type: mongoose.Schema.ObjectId,
@@ -26,8 +26,7 @@ const documentSchema = mongoose.Schema({
   owner: {
     type:mongoose.Schema.ObjectId,
     ref: 'User'
-  },
-  password: String
+  }
 });
 
 const User = mongoose.model('User', userSchema);

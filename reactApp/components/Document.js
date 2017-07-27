@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
+// import io from 'socket.io-client';
+
 // DraftJS stuff 
 import {
   DefaultDraftBlockRenderMap,
@@ -36,9 +38,22 @@ class Document extends React.Component {
       editorState: EditorState.createEmpty(),
       inlineStyles: {}
     };
+
+
+  //   this.socket = io('http://localhost:3000');
+  //   this.socket.emit('hello', {name: 'Otto'});
+  //   this.socket.on('helloBack', () => console.log('hello back'));
+    
+  //   // Put the doc idea after the doc key below 
+  //   this.socket.emit('join', {doc: });
   }
 
+  // componentWillUnmount() {
+  //   // this.socket.disonnect();
+  // };
+
   onChange(editorState) {
+    // const contentState = editorState.getCurrentContent(); 
     this.setState({
       editorState: editorState
     });
@@ -53,7 +68,6 @@ class Document extends React.Component {
     } else {
       this.setState({editorState: RichUtils.toggleInlineStyle(this.state.editorState, style)});
     }
-
   }
 
   // -------------------------------------------------------------------------------------
@@ -135,10 +149,24 @@ class Document extends React.Component {
   // Handling document saves
   // -------------------------------------------------------------------------------------
   saveHandler() {
+    // const contentState = this.state.editorState.getCurrentContent(); 
+    // const stringifiedContent = JSON.stringify(convertToRaw(contentState));
+   
+    // What about inlineStyles??? 
+    // Or whatever we are using for docId
+    const docId = this.props.docId;
+
+      // const new EditorState = EditorState.createWithContent(contentState);
+      // then use this to update this.state.editorState
     axios.post('/saveDoc', {
+      docId: docId,
       editorState: this.state.editorState, 
       inlineStyles: this.state.inlineStyles
     })
+
+    // JSON.stringify != JSON.parse 
+    // convertToRaw != convertFromRaw 
+
     .then((res) => {
       res.json();
     })
@@ -154,10 +182,10 @@ class Document extends React.Component {
     return (
       <div>
         <Link to='/'>Home</Link>
-        <RaisedButton 
+        {/* <RaisedButton 
           backgroundColor={colors.blue100}
           onClick={()=>this.saveHandler()}
-        />
+        /> */}
         <div className='toolbar'>
           {this.formatButton({icon: 'format_bold', style: 'BOLD'})}
           {this.formatButton({icon: 'format_italics', style: 'ITALIC'})}

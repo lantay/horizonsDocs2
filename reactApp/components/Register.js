@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Link, hashHistory  } from 'react-router';
 // Axios 
 import axios from 'axios';
 
@@ -11,7 +11,7 @@ import axios from 'axios';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 // import FontIcon from 'material-ui/FontIcon';
-// import * as colors from 'material-ui/styles/colors';
+// import * as colors from 'material-ui/styles/colors'
 
 class Register extends React.Component {
   constructor(props) {
@@ -51,6 +51,7 @@ class Register extends React.Component {
     })
     .then((res) => {
       console.log(res.data);
+      // this.props.history.push('/Home');
     })  
     .catch((err) => {
       console.log(err);
