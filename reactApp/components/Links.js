@@ -28,7 +28,7 @@ class Links extends React.Component {
         console.log(error);
       });
   }
-  
+
   createDoc(){
     axios.post('/createDoc'), {
       params: {
@@ -40,14 +40,14 @@ class Links extends React.Component {
         params: {
           userId: this.state.userId
         }
-      }  
+      }
     })
     .catch(function (error) {
       console.log(error);
     });
 
   }
-  
+
   loadDoc(){
 
   }
