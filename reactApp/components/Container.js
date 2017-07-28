@@ -1,11 +1,11 @@
 import React from 'react';
-import Home from './Home';
+import Router from './Router';
 import { HashRouter } from 'react-router-dom';
 
 const Container = () => (
   <div>
     <HashRouter>
-      <Home />
+      <Router />
     </HashRouter>
   </div>
 ); 

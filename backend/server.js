@@ -65,16 +65,13 @@ app.post('/register', function(req, res) {
 });
 
 // Retrieving the list of document upon logging in
-app.get('/docslist', function(req, res) {
-  var docsArray = [];
-  Doc.find({collaborators:req.params.userId})
+app.post('/docsList', function(req, res) {
+  console.log(req.body);
+  Doc.find({collabs : req.body.userId})
     .exec()
     .then((documents) => {
-      documents.forEach((document) => {
-        docsArray.push(document);
-      });
+      res.send(documents);
     });
-  res.send(docsArray);
 });
 
 // Creating a new document 
@@ -84,19 +81,38 @@ app.post('/createDoc', function(req, res) {
     dateCreated: new Date(),
     // With the user id we have to go find their user object in the DB and add them as the owner and and as a collaborator
     collabs: [req.body.userId],
-    owner: req.body.userId
+    owner: req.body.userId, 
+    editorState: null
   });
-  newDoc.save(function(err, user) {
+  newDoc.save(function(err, doc) {
     if (err) {
       console.log("error", err);
     } else {
-      res.send('Successfully saved the doc!');
+      console.log(doc);
+      res.send(doc);
     }
   });
 });
 
+// Getting the info for a document 
+app.post('/doc', function(req, res){
+  Doc.findOne({_id: req.body.docId}, function(err, doc){
+    console.log(doc);
+    res.send(doc);
+  });
+});
+
 // Saving changes to a document 
-app.get('/saveDoc', function(req, res) {	
+app.post('/saveDoc', function(req, res) {	
+  console.log(req.body);
+  Doc.findOneAndUpdate({_id: req.body.docId}, {editorState: req.body.editorState}, function(err, doc) {
+    if (err) {
+      console.log('error', err);
+    } else {
+      console.log(doc); 
+      res.send(doc);
+    }
+  });
 });
 
 app.listen(3000, function () {
