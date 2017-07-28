@@ -46,13 +46,37 @@ class Portal extends React.Component {
     //   console.log(error);
     // });
   }
-  // -------------------------------------------------------------------------------------
-  // Creating a new doc 
-  // -------------------------------------------------------------------------------------
 
   handleNewDocName(event) {
     this.setState({newDocName: event.target.value});
   }
+  //
+  // createDoc() {
+  //   axios.post('http://localhost:3000/createDoc', {
+  //     userId: this.state.userId,
+  //     docName: this.state.newDocName
+  //   })
+  //   .then((res) => {
+  //     console.log(res);
+  //
+  //
+  // createDoc(){
+  //   axios.post('/createDoc'), {
+  //     params: {
+  //       userId: this.state.userId
+  //     }
+  //   }
+  //   .then(function (response) {
+  //     axios.get('/edit/:docId'), {
+  //       params: {
+  //         userId: this.state.userId
+  //       }
+  //     }
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //   });
+  // }
 
   createDoc() {
     axios.post('http://localhost:3000/createDoc', {
@@ -80,11 +104,11 @@ class Portal extends React.Component {
   render() {
     return (
       <div>
-        <TextField 
-          onChange={(event) => this.handleNewDocName(event)} 
-          hintText="Document name" 
+        <TextField
+          onChange={(event) => this.handleNewDocName(event)}
+          hintText="Document name"
         />
-        <RaisedButton 
+        <RaisedButton
           label = "Create a new document"
           primary= {true}
           onClick = {() => this.createDoc()}
