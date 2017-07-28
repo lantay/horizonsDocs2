@@ -15,23 +15,23 @@ class Links extends React.Component {
   }
 
   componentDidMount() {
-    // axios.get('/docslist'), {
-    //   params: {
-    //     userId: this.state.userId
-    //   }
-    // }
-    // .then(function(response) {
-    //   this.setState({
-    //     documents: response
-    //   });
-    // })
-    // .catch(function(error) {
-    //   console.log(error);
-    // });
+    axios.get('/docslist'), {
+      params: {
+        userId: this.state.userId
+      }
+    }
+    .then(function(response) {
+      this.setState({
+        documents: response
+      });
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
   }
-  // -------------------------------------------------------------------------------------
-  // Creating a new doc
-  // -------------------------------------------------------------------------------------
+  -------------------------------------------------------------------------------------
+  Creating a new doc
+  -------------------------------------------------------------------------------------
 
   handleNewDocName(event) {
     this.setState({newDocName: event.target.value});
