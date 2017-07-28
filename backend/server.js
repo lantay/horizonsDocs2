@@ -71,7 +71,8 @@ passport.use(new LocalStrategy(function(username, password, done) {
 app.use(passport.initialize());
 app.use(passport.session());
 
-// TODO: edit res.send to res.json +edit .register so it authenticates the user
+// TODO: edit res.send to res.json +edit .
+ // so it authenticates the user
 
 // Handling a registration request
 app.post('/register', function(req, res) {

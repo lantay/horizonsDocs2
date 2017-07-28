@@ -29,40 +29,37 @@ class Links extends React.Component {
       console.log(error);
     });
   }
-  -------------------------------------------------------------------------------------
-  Creating a new doc
-  -------------------------------------------------------------------------------------
 
   handleNewDocName(event) {
     this.setState({newDocName: event.target.value});
   }
-
-  createDoc() {
-    axios.post('http://localhost:3000/createDoc', {
-      userId: this.state.userId,
-      docName: this.state.newDocName
-    })
-    .then((res) => {
-      console.log(res);
-
-
-  createDoc(){
-    axios.post('/createDoc'), {
-      params: {
-        userId: this.state.userId
-      }
-    }
-    .then(function (response) {
-      axios.get('/edit/:docId'), {
-        params: {
-          userId: this.state.userId
-        }
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  }
+  //
+  // createDoc() {
+  //   axios.post('http://localhost:3000/createDoc', {
+  //     userId: this.state.userId,
+  //     docName: this.state.newDocName
+  //   })
+  //   .then((res) => {
+  //     console.log(res);
+  //
+  //
+  // createDoc(){
+  //   axios.post('/createDoc'), {
+  //     params: {
+  //       userId: this.state.userId
+  //     }
+  //   }
+  //   .then(function (response) {
+  //     axios.get('/edit/:docId'), {
+  //       params: {
+  //         userId: this.state.userId
+  //       }
+  //     }
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //   });
+  // }
 
   loadDoc(){
 
@@ -91,4 +88,5 @@ class Links extends React.Component {
       </div>
     );
   }
+}
   export default Links;
