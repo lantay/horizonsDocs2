@@ -6,7 +6,7 @@ import Login from './Login';
 const Container = () => (
   <div>
     <HashRouter>
-      <Login/>
+      <Register/>
     </HashRouter>
   </div>
 );
