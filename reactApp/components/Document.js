@@ -9,7 +9,9 @@ import {
   DefaultDraftBlockRenderMap,
   Editor,
   EditorState,
-  RichUtils
+  RichUtils, 
+  convertToRaw, 
+  convertFromRaw
 } from 'draft-js';
 
 // Stuff for left, right, and center text alignments
@@ -46,6 +48,27 @@ class Document extends React.Component {
     
   //   // Put the doc idea after the doc key below 
   //   this.socket.emit('join', {doc: });
+  }
+
+  componentDidMount() {
+    // const contentState = this.state.editorState.getCurrentContent(); 
+    // const stringifiedContent = JSON.stringify(convertToRaw(contentState));
+
+    // JSON.stringify != JSON.parse 
+    // convertToRaw != convertFromRaw 
+    console.log('made it here!');
+    axios.post('http://localhost:3000/doc', {
+      docId: this.props.docId,
+    })
+    .then((res) => {
+      console.log(res);
+      const destringifiedContent = convertFromRaw(JSON.parse(res.data.editorState)); 
+      const newEditorState = EditorState.createWithContent(destringifiedContent);
+      this.setState({editorState: newEditorState});
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }
 
   // componentWillUnmount() {
@@ -149,27 +172,16 @@ class Document extends React.Component {
   // Handling document saves
   // -------------------------------------------------------------------------------------
   saveHandler() {
-    // const contentState = this.state.editorState.getCurrentContent(); 
-    // const stringifiedContent = JSON.stringify(convertToRaw(contentState));
-   
-    // What about inlineStyles??? 
-    // Or whatever we are using for docId
-    const docId = this.props.docId;
+    const contentState = this.state.editorState.getCurrentContent(); 
+    console.log('contentState = ', contentState);
 
-      // const new EditorState = EditorState.createWithContent(contentState);
-      // then use this to update this.state.editorState
-    axios.post('/saveDoc', {
-      docId: docId,
-      editorState: this.state.editorState, 
-      inlineStyles: this.state.inlineStyles
-    })
+    const stringifiedContent = JSON.stringify(convertToRaw(contentState));
+    console.log('stringifiedContent', stringifiedContent);
 
-    // JSON.stringify != JSON.parse 
-    // convertToRaw != convertFromRaw 
-
-    .then((res) => {
-      res.json();
-    })
+    axios.post('http://localhost:3000/saveDoc', {
+      docId: this.props.docId,
+      editorState: stringifiedContent
+    }) 
     .then((res)=> {
       console.log('Updates saved to the server!');
     })
@@ -182,10 +194,13 @@ class Document extends React.Component {
     return (
       <div>
         <Link to='/'>Home</Link>
-        {/* <RaisedButton 
+        <h1>{this.props.title}</h1>
+        <h3>ID: {this.props.docId}</h3>
+        <RaisedButton 
           backgroundColor={colors.blue100}
           onClick={()=>this.saveHandler()}
-        /> */}
+          label="Save"
+        /> 
         <div className='toolbar'>
           {this.formatButton({icon: 'format_bold', style: 'BOLD'})}
           {this.formatButton({icon: 'format_italics', style: 'ITALIC'})}

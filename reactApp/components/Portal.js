@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 
-class Links extends React.Component {
+class Portal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -15,19 +15,36 @@ class Links extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('/docslist'), {
-      params: {
-        userId: this.state.userId
-      }
-    }
-    .then(function(response) {
-      this.setState({
-        documents: response
-      });
+    console.log(this.props.userId);
+    axios.post('http://localhost:3000/docsList', {
+      userId: this.props.userId
     })
-    .catch(function(error) {
-      console.log(error);
+    .then((res) => {
+      var docs = [];
+      console.log(res);
+      res.data.forEach(function(doc) {
+        docs.push(doc);
+      });
+      this.setState({documents: docs});
+      this.props.setDocs(docs);
+      console.log(this.state);
+    })
+    .catch((err) => {
+      console.log(err);
     });
+    // axios.get('/docslist'), {
+    //   params: {
+    //     userId: this.state.userId
+    //   }
+    // }
+    // .then(function(response) {
+    //   this.setState({
+    //     documents: response
+    //   });
+    // })
+    // .catch(function(error) {
+    //   console.log(error);
+    // });
   }
 
   handleNewDocName(event) {
@@ -61,6 +78,25 @@ class Links extends React.Component {
   //   });
   // }
 
+  createDoc() {
+    axios.post('http://localhost:3000/createDoc', {
+      userId: this.props.userId, 
+      docName: this.state.newDocName, 
+      editorState: null
+    })
+    .then((res) => {
+      console.log(res);
+      var docs = this.state.documents;
+      docs.unshift(res.data);
+      this.setState({documents: docs});
+      this.props.setDocs(docs);
+      console.log(this.state);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+  
   loadDoc(){
 
   }
@@ -79,6 +115,9 @@ class Links extends React.Component {
         />
         <nav>
           <ul>
+            {this.state.documents.map(doc => 
+              <li key={doc._id}><Link to={'/'+doc._id}>{doc.title}</Link></li>
+            )}
             <li><Link to='/Document1'>Document 1</Link></li>
             {/* map over the documents in the state to get a list of the documents */}
           </ul>
@@ -89,4 +128,4 @@ class Links extends React.Component {
     );
   }
 }
-  export default Links;
+export default Portal;
