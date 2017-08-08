@@ -8,7 +8,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
 
-import Draft from '../node_modules/draft-js/dist/Draft.css';
+// import Draft from '../node_modules/draft-js/dist/Draft.css';
 require ('./css/main.css');
 
 // import Welcome from './components/Welcome';
@@ -20,7 +20,9 @@ require ('./css/main.css');
 
 ReactDOM.render(
   <MuiThemeProvider>
-      <Container />
+      <div>
+        <Container />
+      </div>
   </MuiThemeProvider>,
    document.getElementById('root')
 );

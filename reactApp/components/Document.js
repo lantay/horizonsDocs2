@@ -1,19 +1,18 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+
+// import io from 'socket.io-client';
+
+// DraftJS stuff 
 import {
   DefaultDraftBlockRenderMap,
   Editor,
   EditorState,
-  RichUtils
+  RichUtils, 
+  convertToRaw, 
+  convertFromRaw
 } from 'draft-js';
-import { Link } from 'react-router-dom';
-// Material-UI stuff
-import RaisedButton from 'material-ui/RaisedButton';
-import Popover, {PopoverAnimationVertical} from 'material-ui/Popover';
-import FontIcon from 'material-ui/FontIcon';
-import * as colors from 'material-ui/styles/colors';
-
-// Colorpicker
-import { SwatchesPicker } from 'react-color';
 
 // Stuff for left, right, and center text alignments
 import { Map } from 'immutable';
@@ -23,6 +22,17 @@ const myBlockTypes = DefaultDraftBlockRenderMap.merge(new Map({
   }
 }));
 
+// Material-UI stuff
+import RaisedButton from 'material-ui/RaisedButton';
+import Popover, {PopoverAnimationVertical} from 'material-ui/Popover';
+import FontIcon from 'material-ui/FontIcon';
+import * as colors from 'material-ui/styles/colors';
+
+// Colorpicker
+import { SwatchesPicker } from 'react-color';
+
+
+
 class Document extends React.Component {
   constructor(props) {
     super(props);
@@ -30,9 +40,43 @@ class Document extends React.Component {
       editorState: EditorState.createEmpty(),
       inlineStyles: {}
     };
+
+
+  //   this.socket = io('http://localhost:3000');
+  //   this.socket.emit('hello', {name: 'Otto'});
+  //   this.socket.on('helloBack', () => console.log('hello back'));
+    
+  //   // Put the doc idea after the doc key below 
+  //   this.socket.emit('join', {doc: });
   }
 
+  componentDidMount() {
+    // const contentState = this.state.editorState.getCurrentContent(); 
+    // const stringifiedContent = JSON.stringify(convertToRaw(contentState));
+
+    // JSON.stringify != JSON.parse 
+    // convertToRaw != convertFromRaw 
+    console.log('made it here!');
+    axios.post('http://localhost:3000/doc', {
+      docId: this.props.docId,
+    })
+    .then((res) => {
+      console.log(res);
+      const destringifiedContent = convertFromRaw(JSON.parse(res.data.editorState)); 
+      const newEditorState = EditorState.createWithContent(destringifiedContent);
+      this.setState({editorState: newEditorState});
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
+  // componentWillUnmount() {
+  //   // this.socket.disonnect();
+  // };
+
   onChange(editorState) {
+    // const contentState = editorState.getCurrentContent(); 
     this.setState({
       editorState: editorState
     });
@@ -47,7 +91,6 @@ class Document extends React.Component {
     } else {
       this.setState({editorState: RichUtils.toggleInlineStyle(this.state.editorState, style)});
     }
-
   }
 
   // -------------------------------------------------------------------------------------
@@ -125,10 +168,39 @@ class Document extends React.Component {
     );
   }
 
+  // -------------------------------------------------------------------------------------
+  // Handling document saves
+  // -------------------------------------------------------------------------------------
+  saveHandler() {
+    const contentState = this.state.editorState.getCurrentContent(); 
+    console.log('contentState = ', contentState);
+
+    const stringifiedContent = JSON.stringify(convertToRaw(contentState));
+    console.log('stringifiedContent', stringifiedContent);
+
+    axios.post('http://localhost:3000/saveDoc', {
+      docId: this.props.docId,
+      editorState: stringifiedContent
+    }) 
+    .then((res)=> {
+      console.log('Updates saved to the server!');
+    })
+    .catch((err)=> {
+      console.log("Error! : ", err);
+    });
+  }
+
   render() {
     return (
       <div>
         <Link to='/'>Home</Link>
+        <h1>{this.props.title}</h1>
+        <h3>ID: {this.props.docId}</h3>
+        <RaisedButton 
+          backgroundColor={colors.blue100}
+          onClick={()=>this.saveHandler()}
+          label="Save"
+        /> 
         <div className='toolbar'>
           {this.formatButton({icon: 'format_bold', style: 'BOLD'})}
           {this.formatButton({icon: 'format_italics', style: 'ITALIC'})}
@@ -141,9 +213,9 @@ class Document extends React.Component {
           {this.formatButton({icon: 'format_align_right', style: 'ordered-list-item', block: true})}
         </div>
         <Editor
-          ref="editor"
           blockRenderMap={myBlockTypes}
-          editorState={this.state.editorState} onChange={this.onChange.bind(this)}
+          editorState={this.state.editorState} 
+          onChange={this.onChange.bind(this)}
           customStyleMap={this.state.inlineStyles}
         />
       </div>
